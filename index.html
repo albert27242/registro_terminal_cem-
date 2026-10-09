@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de Ingreso — Terminal | Gobierno de Esquina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============ SISTEMA DE IDENTIDAD — GOBIERNO DE ESQUINA ============ */
+  :root{
+    --brand:#1fa3ec;
+    --brand-dark:#1787c7;
+    --brand-deep:#0e5c8a;
+    --brand-050:#eaf6fd;
+    --accent:#fbb912;          /* sol del logo */
+    --green-500:#2faa5a;
+    --ink:#111418;
+    --ink-060:rgba(17,20,24,.6);
+    --ink-040:rgba(17,20,24,.4);
+    --surface:#ffffff;
+    --surface-tint:#eaf6fd;
+    --border:#bfe3f7;
+    --radius-card:18px;
+    --radius-ctrl:999px;       /* pill */
+    --shadow-brand:0 10px 24px rgba(20,63,94,.18);
+    --shadow-soft:0 4px 14px rgba(20,63,94,.10);
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Open Sans",Arial,sans-serif;}
+  body{background:#f5fafd;color:var(--ink);padding:28px 14px;}
+
+  .hoja{
+    max-width:1100px;margin:0 auto;background:var(--surface);
+    border:3px solid var(--brand);border-radius:var(--radius-card);
+    box-shadow:var(--shadow-brand);overflow:hidden;
+  }
+
+  /* ===== Encabezado ===== */
+  .encabezado{
+    display:flex;justify-content:space-between;align-items:center;gap:16px;
+    background:var(--brand);color:#fff;padding:20px 26px;
+  }
+  .encabezado .marca{display:flex;align-items:center;gap:14px;}
+  .encabezado .isotipo{
+    width:52px;height:52px;border-radius:50%;flex:none;
+    background:#fff;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 6px rgba(255,255,255,.22), 0 0 18px rgba(31,163,236,.55);
+  }
+  .encabezado .isotipo svg{width:28px;height:28px;stroke:var(--brand-deep);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .encabezado h1{
+    font-family:"Novecento Sans","Novecento","Open Sans",sans-serif;
+    font-weight:800;font-size:1.7rem;letter-spacing:.5px;text-transform:uppercase;line-height:1.05;
+  }
+  .encabezado .sub{
+    font-size:.8rem;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;
+    color:#fff;opacity:.85;margin-top:3px;
+  }
+  .folio{
+    font-family:"Open Sans",sans-serif;font-size:.95rem;font-weight:800;
+    background:#fff;color:var(--ink);padding:9px 18px;
+    border-radius:var(--radius-ctrl);white-space:nowrap;
+    box-shadow:var(--shadow-soft);
+  }
+  .folio span{color:var(--brand-deep);}
+
+  /* ===== Barra de fecha ===== */
+  .fecha-box{
+    display:flex;gap:10px;align-items:center;padding:13px 26px;
+    background:var(--surface-tint);border-bottom:1px solid var(--border);
+    font-weight:800;text-transform:uppercase;font-size:.8rem;letter-spacing:1.2px;
+    color:var(--brand-deep);
+  }
+  .fecha-box input{
+    border:1px solid var(--border);border-radius:var(--radius-ctrl);padding:8px 16px;
+    font-family:"Open Sans",sans-serif;font-weight:600;font-size:.95rem;
+    background:var(--surface);color:var(--ink);
+  }
+  .fecha-box input:focus{outline:2px solid var(--brand);border-color:var(--brand);}
+
+  /* ===== Formulario ===== */
+  form{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border-bottom:1px solid var(--border);}
+  .campo{
+    display:flex;flex-direction:column;padding:13px 16px 15px;
+    border-right:1px solid var(--border);border-bottom:1px solid var(--border);
+    transition:background .15s;
+  }
+  .campo:hover{background:var(--brand-050);}
+  .campo label{
+    font-size:.72rem;font-weight:800;text-transform:uppercase;
+    letter-spacing:1.2px;color:var(--brand-deep);margin-bottom:7px;
+  }
+  .campo input{
+    border:2px solid var(--border);border-radius:12px;background:var(--surface);
+    font-size:1rem;font-weight:600;padding:9px 12px;outline:none;color:var(--ink);
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .campo select{
+    border:2px solid var(--border);border-radius:12px;background:var(--surface);
+    font-size:1rem;font-weight:600;padding:9px 12px;outline:none;color:var(--ink);
+    cursor:pointer;transition:border-color .15s, box-shadow .15s;
+  }
+  .campo select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(31,163,236,.18);}
+  .campo input.otro{margin-top:8px;}
+  .campo input:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(31,163,236,.18);}
+
+  .c-empresa{grid-column:span 2}
+  .c-proc{grid-column:span 2}
+  .c-dest{grid-column:span 2}
+  .c-conductor{grid-column:span 2}
+  .c-obs{grid-column:span 6}
+
+  /* ===== Botones ===== */
+  .acciones{
+    display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+    padding:20px 26px;background:var(--surface-tint);
+  }
+  button{
+    cursor:pointer;border:none;border-radius:var(--radius-ctrl);padding:14px 32px;
+    font-family:"Open Sans",sans-serif;font-size:.95rem;font-weight:800;
+    text-transform:uppercase;letter-spacing:1.2px;transition:.2s var(--ease);
+    box-shadow:var(--shadow-soft);
+  }
+  button:hover{filter:brightness(.94);}
+  button:active{transform:scale(.97);}
+  .btn-guardar{background:var(--green-500);color:#fff;box-shadow:0 4px 0 #207c41, var(--shadow-soft);}
+  .btn-limpiar{background:var(--surface);color:var(--ink);border:2px solid var(--ink);}
+  .btn-imprimir{background:var(--ink);color:#fff;}
+
+  /* ===== Tabla de registros ===== */
+  .registros{padding:8px 26px 28px;}
+  .registros h2{
+    font-family:"Novecento Sans","Novecento","Open Sans",sans-serif;font-weight:800;
+    font-size:1.5rem;letter-spacing:.5px;text-transform:uppercase;
+    color:var(--ink);margin:20px 0 12px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .registros h2 .caja{
+    background:var(--brand);color:#fff;border-radius:10px;padding:2px 12px;
+  }
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:.88rem;overflow:hidden;border-radius:12px;}
+  th{
+    background:var(--brand);color:#fff;font-weight:800;
+    text-transform:uppercase;font-size:.78rem;letter-spacing:1px;
+    padding:11px 8px;border-right:1px solid var(--brand-dark);
+  }
+  th:last-child{border-right:none;}
+  td{border:1px solid var(--border);border-top:none;padding:9px 8px;text-align:center;font-weight:600;}
+  tbody tr{transition:background .15s;}
+  tbody tr:hover td{background:var(--brand-050);}
+
+  .estado{text-align:center;font-weight:700;font-size:.9rem;padding:0 26px 14px;background:var(--surface-tint);min-height:0;}
+  .estado.ok{color:var(--green-500);}
+  .estado.error{color:#c0392b;}
+  .estado.info{color:var(--brand-deep);}
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .acciones{display:none;}
+    .hoja{border:none;box-shadow:none;}
+  }
+  @media (max-width:760px){
+    form{grid-template-columns:repeat(2,1fr);}
+    .campo{grid-column:span 2 !important;}
+    .encabezado{flex-direction:column;align-items:flex-start;gap:12px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hoja">
+  <div class="encabezado">
+    <div class="marca">
+      <div class="isotipo">
+        <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 10h16"/><circle cx="8.5" cy="19" r="1.6"/><circle cx="15.5" cy="19" r="1.6"/></svg>
+      </div>
+      <div>
+        <h1>Registro de ingreso — Terminal</h1>
+        <div class="sub">Gobierno de Esquina · Corrientes</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fecha-box">
+    Fecha: <input type="date" id="fecha">
+  </div>
+
+  <form id="formRegistro" autocomplete="off">
+    <div class="campo c-empresa"><label>Empresa</label>
+      <input type="text" id="empresa" list="empresas" required>
+      <datalist id="empresas">
+        <option value="Flecha Bus">
+        <option value="Rápido Tata">
+        <option value="Chevallier">
+        <option value="Albizzatti">
+        <option value="Silvia">
+        <option value="Vosa">
+        <option value="Expreso Singer">
+        <option value="Expreso Ciudad de Corrientes">
+        <option value="Expreso Libertador">
+        <option value="Expreso Meta">
+        <option value="Expreso Itatí">
+        <option value="Expreso Santo Tomé">
+        <option value="El Práctico">
+      </datalist>
+    </div>
+    <div class="campo"><label>Patente</label><input type="text" id="patente" style="text-transform:uppercase"></div>
+    <div class="campo c-conductor"><label>Conductor</label><input type="text" id="conductor" required></div>
+    <div class="campo"><label>Carnet</label><input type="text" id="carnet"></div>
+    <div class="campo"><label>Llegada</label><input type="time" id="llegada"></div>
+    <div class="campo"><label>Salida</label><input type="time" id="salida"></div>
+    <div class="campo c-proc"><label>Procedencia</label>
+      <select id="procedencia" onchange="toggleOtro('procedencia')">
+        <option value="">Seleccionar…</option>
+        <option>Buenos Aires</option>
+        <option>Chaco</option>
+        <option>Corrientes Capital</option>
+        <option>Santa Fe</option>
+        <option>Rosario</option>
+        <option>Córdoba</option>
+        <option>Paraná</option>
+        <option>Goya</option>
+        <option value="__otro__">Otro</option>
+      </select>
+      <input type="text" id="procedenciaOtro" class="otro" placeholder="Escribí el lugar" style="display:none">
+    </div>
+    <div class="campo c-dest"><label>Destino</label>
+      <select id="destino" onchange="toggleOtro('destino')">
+        <option value="">Seleccionar…</option>
+        <option>Buenos Aires</option>
+        <option>Chaco</option>
+        <option>Corrientes Capital</option>
+        <option>Santa Fe</option>
+        <option>Rosario</option>
+        <option>Córdoba</option>
+        <option>Paraná</option>
+        <option>Goya</option>
+        <option value="__otro__">Otro</option>
+      </select>
+      <input type="text" id="destinoOtro" class="otro" placeholder="Escribí el lugar" style="display:none">
+    </div>
+    <div class="campo c-obs"><label>Observación</label><input type="text" id="observacion"></div>
+  </form>
+
+  <div class="acciones">
+    <button type="submit" form="formRegistro" class="btn-guardar">Registrar ingreso</button>
+    <button type="button" class="btn-limpiar" onclick="limpiarForm()">Limpiar</button>
+    <button type="button" class="btn-imprimir" onclick="window.print()">Imprimir</button>
+  </div>
+
+  <div class="estado" id="estado"></div>
+
+  <div class="registros">
+    <h2>Ingresos del <span class="caja">día</span></h2>
+    <table id="tabla">
+      <thead>
+        <tr>
+          <th>Hora</th><th>Empresa</th><th>Patente</th>
+          <th>Conductor</th><th>Carnet</th><th>Llegada</th><th>Salida</th>
+          <th>Procedencia</th><th>Destino</th><th>Obs.</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // ====== CONEXIÓN CON GOOGLE SHEETS ======
+  // Pegá acá la URL de la aplicación web de Apps Script (termina en /exec)
+  const URL_SHEETS = 'https://script.google.com/macros/s/AKfycbyfmG74viYb8zF_B-U-zmnemWEp6iONNnG8-LAPKpsJiHI_4KqWdVzMNkcup200BCEfGg/exec';
+
+  function mostrarEstado(texto, tipo){
+    const e = document.getElementById('estado');
+    e.textContent = texto;
+    e.className = 'estado ' + tipo;
+  }
+
+  async function enviarASheets(registro){
+    if(!URL_SHEETS.startsWith('https://')){
+      mostrarEstado('Falta configurar la URL de la hoja de cálculo: el registro NO se guardó.', 'error');
+      return;
+    }
+    mostrarEstado('Enviando a la base de datos…', 'info');
+    try{
+      await fetch(URL_SHEETS, {
+        method:'POST',
+        mode:'no-cors',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify(registro)
+      });
+      mostrarEstado('Registro enviado a la base de datos.', 'ok');
+    }catch(err){
+      mostrarEstado('No se pudo enviar (sin conexión). El registro NO se guardó, volvé a intentarlo.', 'error');
+    }
+  }
+
+  // Fecha por defecto: hoy (hora local, no UTC)
+  (function(){
+    const h = new Date();
+    document.getElementById('fecha').value =
+      h.getFullYear() + '-' + String(h.getMonth()+1).padStart(2,'0') + '-' + String(h.getDate()).padStart(2,'0');
+  })();
+
+  // ====== TABLA: SE LEE DIRECTAMENTE DE GOOGLE SHEETS ======
+  const CAMPOS_TABLA = ['hora','empresa','patente','conductor','carnet','llegada','salida',
+                        'procedencia','destino','observacion'];
+
+  function mensajeTabla(texto){
+    const tbody = document.querySelector('#tabla tbody');
+    tbody.replaceChildren();
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = CAMPOS_TABLA.length;
+    td.textContent = texto;
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+  }
+
+  function dibujarTabla(registros){
+    const tbody = document.querySelector('#tabla tbody');
+    tbody.replaceChildren();
+    if(!registros.length){ mensajeTabla('No hay ingresos registrados para esta fecha.'); return; }
+    registros.forEach(r => {
+      const tr = document.createElement('tr');
+      CAMPOS_TABLA.forEach(k => {
+        const td = document.createElement('td');
+        td.textContent = r[k] || '—';
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function cargarDesdeSheets(silencioso){
+    if(!URL_SHEETS.startsWith('https://')){ mensajeTabla('Falta configurar la URL de la hoja de cálculo.'); return; }
+    const fecha = document.getElementById('fecha').value;
+    try{
+      const resp = await fetch(URL_SHEETS + '?accion=listar&fecha=' + encodeURIComponent(fecha));
+      const data = await resp.json();
+      if(!data.ok) throw new Error(data.error);
+      dibujarTabla(data.registros);
+    }catch(err){
+      if(!silencioso){
+        mensajeTabla('No se pudo leer la base de datos.');
+        mostrarEstado('No se pudo leer la hoja de cálculo. Revisá la conexión.', 'error');
+      }
+    }
+  }
+
+  mensajeTabla('Cargando…');
+  cargarDesdeSheets(false);
+  document.getElementById('fecha').addEventListener('change', () => cargarDesdeSheets(false));
+  setInterval(() => cargarDesdeSheets(true), 30000); // se actualiza sola cada 30 s
+
+  document.getElementById('formRegistro').addEventListener('submit', async e => {
+    e.preventDefault();
+    const id = ['empresa','patente','conductor','carnet','llegada','salida',
+                'procedencia','destino','observacion'];
+    const registro = {hora: new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})};
+    id.forEach(k => registro[k] = valorCampo(k));
+    registro.fecha = document.getElementById('fecha').value;
+
+    limpiarForm();
+    document.getElementById('empresa').focus();
+
+    await enviarASheets(registro);
+    cargarDesdeSheets(true); // refresca la tabla con lo que realmente hay en la hoja
+  });
+
+  function toggleOtro(id){
+    const esOtro = document.getElementById(id).value === '__otro__';
+    const campo = document.getElementById(id + 'Otro');
+    campo.style.display = esOtro ? 'block' : 'none';
+    campo.required = esOtro;
+    if(esOtro) campo.focus(); else campo.value = '';
+  }
+
+  function valorCampo(k){
+    const el = document.getElementById(k);
+    if(el.tagName === 'SELECT' && el.value === '__otro__')
+      return document.getElementById(k + 'Otro').value.trim();
+    return el.value.trim();
+  }
+
+  function limpiarForm(){
+    ['empresa','patente','conductor','carnet','llegada','salida',
+     'procedencia','destino','observacion']
+      .forEach(k => document.getElementById(k).value = '');
+    ['procedencia','destino'].forEach(k => toggleOtro(k));
+  }
+</script>
+
+</body>
+</html>
